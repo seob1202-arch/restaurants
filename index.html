@@ -7,12 +7,10 @@
     <meta name="keywords" content="한인 업체, 해외 한인, 한식당, 한인 커뮤니티">
     <title>한인 업체 검색 - 전 세계 한인 비즈니스 디렉토리</title>
     
-    <!-- Inter 영문 웹폰트 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Pretendard 한글 웹폰트 -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
     
     <style>
@@ -865,7 +863,7 @@
             .pagination-wrapper,
             .skip-link,
             .location-notice {
-                display: none !important;
+                display: none !importan
             }
             
             .header {
@@ -897,8 +895,8 @@
     <a href="#main-content" class="skip-link">본문으로 바로가기</a>
     
     <header class="header">
-        <h1>🌏 전 세계 한식당 검색</h1>
-        <p>국가, 도시, 업종별로 쉽게 찾아보세요</p>
+        <h1>🌏 전 세계 한인 업체 검색</h1>
+        <p>국가, 도시, 업종별로 한인 업체를 쉽게 찾아보세요</p>
     </header>
     
     <main class="container" id="main-content" role="main">
@@ -1091,7 +1089,7 @@
             currentView: 'card',
             filteredData: [],
             currentPage: 1,
-            itemsPerPage: 12, // 초기값을 12로 줄임
+            itemsPerPage: 12,
             selectedCategories: new Set(),
             searchQuery: '',
             selectedCountry: '',
@@ -1138,11 +1136,13 @@
                 setupEventListeners();
                 getUserLocation();
                 
-                renderResults();
+                // ⭐ [업데이트] 1페이지를 먼저 렌더링합니다.
+                // 1페이지 이미지들은 이 시점에 '즉시 로드'됩니다.
+                renderResults(); 
                 renderPagination();
                 updateResultCount();
                 
-                // 개선된 Lazy Loading 초기화
+                // Lazy Loading은 2페이지부터 작동하도록 초기화합니다.
                 initLazyLoading();
                 
             } catch (error) {
@@ -1155,11 +1155,7 @@
         
         // ========== 위치 기능 ==========
         
-        /**
-         * 사용자 위치 가져오기 (Wix iframe 환경 대응)
-         */
         function getUserLocation() {
-            // Wix iframe 환경 감지
             const isInIframe = window.self !== window.top;
             
             if (!navigator.geolocation) {
@@ -1168,16 +1164,12 @@
                 return;
             }
             
-            // iframe 환경이거나 일반 환경 모두 사용자가 선택하도록 변경
             console.log(isInIframe ? 'iframe 환경이 감지되었습니다.' : '위치 정보는 선택사항입니다.');
             showLocationNotice('💡 거리순 정렬을 원하시면 아래 버튼을 클릭하세요.', 'info');
             createLocationButton();
             disableDistanceSort();
         }
         
-        /**
-         * 위치 정보 요청 버튼 생성
-         */
         function createLocationButton() {
             const existingButton = elements.locationNotice.querySelector('.location-btn');
             if (existingButton) return;
@@ -1209,16 +1201,13 @@
             elements.locationNotice.appendChild(button);
         }
         
-        /**
-         * 실제 위치 정보 요청
-         */
         function requestUserLocation() {
             showLocationNotice('📍 위치 정보를 가져오는 중...', 'info');
             
             const options = {
                 enableHighAccuracy: false,
                 timeout: 10000,
-                maximumAge: 300000 // 5분 캐시
+                maximumAge: 300000
             };
             
             navigator.geolocation.getCurrentPosition(
@@ -1250,33 +1239,24 @@
                 },
                 (error) => {
                     console.warn('위치 정보 가져오기 실패:', error);
-                    
                     let errorMessage = '⚠️ 위치 정보를 가져올 수 없습니다. ';
-                    
                     switch(error.code) {
                         case error.PERMISSION_DENIED:
-                            errorMessage += '브라우저 설정에서 위치 권한을 허용해주세요.';
-                            break;
+                            errorMessage += '브라우저 설정에서 위치 권한을 허용해주세요.'; break;
                         case error.POSITION_UNAVAILABLE:
-                            errorMessage += '위치 정보를 사용할 수 없습니다.';
-                            break;
+                            errorMessage += '위치 정보를 사용할 수 없습니다.'; break;
                         case error.TIMEOUT:
-                            errorMessage += '위치 정보 요청 시간이 초과되었습니다.';
-                            break;
+                            errorMessage += '위치 정보 요청 시간이 초과되었습니다.'; break;
                         default:
                             errorMessage += '알 수 없는 오류가 발생했습니다.';
                     }
-                    
                     showLocationNotice(errorMessage, 'error');
-                    
                     if (state.sortBy === 'distance') {
                         state.sortBy = 'rating';
                         elements.sortSelect.value = 'rating';
                         handleFilterChange();
                     }
-                    
                     disableDistanceSort();
-                    
                     setTimeout(() => {
                         elements.locationNotice.classList.add('hidden');
                     }, 10000);
@@ -1285,9 +1265,6 @@
             );
         }
         
-        /**
-         * 거리순 정렬 비활성화
-         */
         function disableDistanceSort() {
             const distanceOption = elements.sortSelect.querySelector('option[value="distance"]');
             if (distanceOption) {
@@ -1296,9 +1273,6 @@
             }
         }
         
-        /**
-         * 거리순 정렬 활성화
-         */
         function enableDistanceSort() {
             const distanceOption = elements.sortSelect.querySelector('option[value="distance"]');
             if (distanceOption) {
@@ -1317,7 +1291,6 @@
         
         function populateCountries() {
             const countries = [...new Set(businessData.map(b => b.country))].sort();
-            
             elements.countrySelect.innerHTML = '<option value="">전체 국가</option>';
             countries.forEach(country => {
                 const option = document.createElement('option');
@@ -1333,13 +1306,11 @@
                 elements.citySelect.disabled = true;
                 return;
             }
-            
             const cities = [...new Set(
                 businessData
                     .filter(b => b.country === country)
                     .map(b => b.city)
             )].sort();
-            
             elements.citySelect.innerHTML = '<option value="">전체 도시</option>';
             cities.forEach(city => {
                 const option = document.createElement('option');
@@ -1347,7 +1318,6 @@
                 option.textContent = city;
                 elements.citySelect.appendChild(option);
             });
-            
             elements.citySelect.disabled = false;
         }
         
@@ -1356,9 +1326,7 @@
             businessData.forEach(business => {
                 business.services.forEach(service => categories.add(service));
             });
-            
             const sortedCategories = ['전체', ...Array.from(categories).sort()];
-            
             elements.categoryChips.innerHTML = '';
             sortedCategories.forEach((category, index) => {
                 const chip = document.createElement('button');
@@ -1368,16 +1336,13 @@
                 chip.setAttribute('aria-label', `${category} 선택`);
                 chip.setAttribute('tabindex', index === 0 ? '0' : '-1');
                 chip.dataset.category = category;
-                
                 chip.innerHTML = `
                     <span class="chip-check">✓</span>
                     <span>${category === '전체' ? '✨ ' : ''}${escapeHtml(category)}</span>
                 `;
-                
                 chip.addEventListener('click', () => handleCategoryClick(category));
                 elements.categoryChips.appendChild(chip);
             });
-            
             state.selectedCategories.add('전체');
         }
         
@@ -1410,12 +1375,10 @@
             
             elements.sortSelect.addEventListener('change', (e) => {
                 state.sortBy = e.target.value;
-                
                 if (state.sortBy === 'distance' && !state.userLocation) {
                     showLocationNotice('⚠️ 위치 정보가 없습니다. 위치 권한을 허용해주세요.', 'error');
                     getUserLocation();
                 }
-                
                 handleFilterChange();
             });
             
@@ -1435,10 +1398,8 @@
                 }
             } else {
                 state.selectedCategories.delete('전체');
-                
                 if (state.selectedCategories.has(category)) {
                     state.selectedCategories.delete(category);
-                    
                     if (state.selectedCategories.size === 0) {
                         state.selectedCategories.add('전체');
                     }
@@ -1446,7 +1407,6 @@
                     state.selectedCategories.add(category);
                 }
             }
-            
             updateChipStates();
             handleFilterChange();
         }
@@ -1463,29 +1423,22 @@
         function handleChipKeyboard(e) {
             const chips = Array.from(elements.categoryChips.querySelectorAll('.chip'));
             const currentIndex = chips.findIndex(chip => chip === document.activeElement);
-            
             if (currentIndex === -1) return;
-            
             let newIndex = currentIndex;
-            
             switch(e.key) {
                 case 'ArrowLeft':
                     e.preventDefault();
-                    newIndex = Math.max(0, currentIndex - 1);
-                    break;
+                    newIndex = Math.max(0, currentIndex - 1); break;
                 case 'ArrowRight':
                     e.preventDefault();
-                    newIndex = Math.min(chips.length - 1, currentIndex + 1);
-                    break;
+                    newIndex = Math.min(chips.length - 1, currentIndex + 1); break;
                 case 'Enter':
                 case ' ':
                     e.preventDefault();
-                    chips[currentIndex].click();
-                    return;
+                    chips[currentIndex].click(); return;
                 default:
                     return;
             }
-            
             chips.forEach((chip, idx) => {
                 chip.setAttribute('tabindex', idx === newIndex ? '0' : '-1');
             });
@@ -1494,7 +1447,6 @@
         
         function handleFilterChange() {
             state.currentPage = 1;
-            
             setTimeout(() => {
                 try {
                     applyFilters();
@@ -1517,25 +1469,20 @@
                         business.businessName.toLowerCase().includes(searchLower) ||
                         business.address.toLowerCase().includes(searchLower) ||
                         business.feature.toLowerCase().includes(searchLower);
-                    
                     if (!matchesSearch) return false;
                 }
-                
                 if (state.selectedCountry && business.country !== state.selectedCountry) {
                     return false;
                 }
-                
                 if (state.selectedCity && business.city !== state.selectedCity) {
                     return false;
                 }
-                
                 if (!state.selectedCategories.has('전체')) {
                     const hasMatchingService = business.services.some(service => 
                         state.selectedCategories.has(service)
                     );
                     if (!hasMatchingService) return false;
                 }
-                
                 return true;
             });
         }
@@ -1543,11 +1490,9 @@
         function applySorting() {
             switch(state.sortBy) {
                 case 'rating':
-                    state.filteredData.sort((a, b) => b.rating - a.rating);
-                    break;
+                    state.filteredData.sort((a, b) => b.rating - a.rating); break;
                 case 'reviews':
-                    state.filteredData.sort((a, b) => b.reviewCount - a.reviewCount);
-                    break;
+                    state.filteredData.sort((a, b) => b.reviewCount - a.reviewCount); break;
                 case 'distance':
                     if (state.userLocation) {
                         state.filteredData.sort((a, b) => (a.distance || 9999) - (b.distance || 9999));
@@ -1558,10 +1503,8 @@
         
         function switchView(view) {
             state.currentView = view;
-            
             elements.cardViewBtn.setAttribute('aria-pressed', view === 'card');
             elements.tableViewBtn.setAttribute('aria-pressed', view === 'table');
-            
             renderResults();
         }
         
@@ -1589,7 +1532,6 @@
                 if (state.filteredData.length === 0) {
                     const hasFilters = state.searchQuery || state.selectedCountry || 
                                      state.selectedCity || !state.selectedCategories.has('전체');
-                    
                     elements.resultsContainer.innerHTML = `
                         <div class="empty-state">
                             <div class="empty-icon">${hasFilters ? '😢' : '🔍'}</div>
@@ -1614,7 +1556,10 @@
                     renderTableView(pageData);
                 }
                 
-                smoothScrollTo(elements.resultsContainer);
+                // ⭐ [업데이트] 1페이지 렌더링 후 스크롤하지 않음 (페이징 시에만 스크롤)
+                if (state.currentPage > 1) {
+                    smoothScrollTo(elements.resultsContainer);
+                }
                 
             } catch (error) {
                 logError(error, 'renderResults');
@@ -1622,7 +1567,7 @@
             }
         }
         
-        // ========== 개선된 카드 뷰 렌더링 ==========
+        // ========== ⭐ [업데이트됨] 카드 뷰 렌더링 ==========
         function renderCardView(data) {
             const grid = document.createElement('div');
             grid.className = 'card-grid';
@@ -1633,15 +1578,31 @@
                 card.setAttribute('role', 'article');
                 card.setAttribute('aria-label', `${business.businessName} 업체 정보`);
                 
-                // 개선된 이미지 처리: loading="lazy" 속성 추가
-                const imgHtml = `
-                    <img 
-                        class="card-image" 
-                        data-src="${escapeHtml(business.image)}"
-                        alt="${escapeHtml(business.businessName)}"
-                        loading="lazy"
-                    />
-                `;
+                // ⭐ [업데이트] 1페이지만 즉시 로드, 2페이지부터 지연 로드
+                let imgHtml = '';
+                const escapedImgUrl = escapeHtml(business.image);
+                const escapedAltText = escapeHtml(business.businessName);
+
+                if (state.currentPage === 1) {
+                    // 1페이지: 즉시 로드 (src 사용, lazy-loading 없음)
+                    imgHtml = `
+                        <img 
+                            class="card-image loaded" 
+                            src="${escapedImgUrl}" 
+                            alt="${escapedAltText}"
+                        />
+                    `;
+                } else {
+                    // 2페이지 이상: 지연 로드 (data-src 및 loading="lazy" 사용)
+                    imgHtml = `
+                        <img 
+                            class="card-image" 
+                            data-src="${escapedImgUrl}"
+                            alt="${escapedAltText}"
+                            loading="lazy"
+                        />
+                    `;
+                }
                 
                 const stars = generateStars(business.rating);
                 const ratingHtml = `
@@ -1700,7 +1661,7 @@
             elements.resultsContainer.appendChild(grid);
         }
         
-        // ========== 개선된 테이블 뷰 렌더링 ==========
+        // ========== ⭐ [업데이트됨] 테이블 뷰 렌더링 ==========
         function renderTableView(data) {
             const container = document.createElement('div');
             container.className = 'table-container';
@@ -1729,6 +1690,30 @@
             data.forEach(business => {
                 const row = document.createElement('tr');
                 
+                // ⭐ [업데이트] 1페이지만 즉시 로드, 2페이지부터 지연 로드
+                let imgHtml = '';
+                const escapedImgUrl = escapeHtml(business.image);
+                const escapedAltText = escapeHtml(business.businessName);
+
+                if (state.currentPage === 1) {
+                    imgHtml = `
+                        <img 
+                            class="table-image loaded" 
+                            src="${escapedImgUrl}" 
+                            alt="${escapedAltText}"
+                        />
+                    `;
+                } else {
+                    imgHtml = `
+                        <img 
+                            class="table-image" 
+                            data-src="${escapedImgUrl}"
+                            alt="${escapedAltText}"
+                            loading="lazy"
+                        />
+                    `;
+                }
+
                 const stars = generateStars(business.rating);
                 const ratingHtml = `
                     <div class="rating">
@@ -1749,14 +1734,7 @@
                     `<a href="https://${escapeHtml(business.website)}" class="table-action-btn" target="_blank" rel="noopener noreferrer">🌐</a>` : '';
                 
                 row.innerHTML = `
-                    <td>
-                        <img 
-                            class="table-image" 
-                            data-src="${escapeHtml(business.image)}" 
-                            alt="${escapeHtml(business.businessName)}"
-                            loading="lazy"
-                        />
-                    </td>
+                    <td>${imgHtml}</td>
                     <td><strong>${escapeHtml(business.businessName)}</strong></td>
                     <td>${ratingHtml}</td>
                     <td>${escapeHtml(business.city)}, ${escapeHtml(business.country)}</td>
@@ -1782,10 +1760,8 @@
         function updateResultCount() {
             const count = state.filteredData.length;
             const selectedCount = state.selectedCategories.size - (state.selectedCategories.has('전체') ? 1 : 0);
-            
             const badge = selectedCount > 0 ? 
                 `<span class="selected-badge" aria-label="${selectedCount}개 업종 선택됨">${selectedCount}</span>` : '';
-            
             elements.resultCount.innerHTML = `
                 검색 결과: <strong>${count}개</strong>
                 ${badge}
@@ -1797,16 +1773,12 @@
                 elements.paginationWrapper.innerHTML = '';
                 return;
             }
-            
             const totalPages = Math.ceil(state.filteredData.length / state.itemsPerPage);
-            
             if (totalPages <= 1) {
                 elements.paginationWrapper.innerHTML = '';
                 return;
             }
-            
             const wrapper = document.createElement('div');
-            
             wrapper.innerHTML = `
                 <div class="items-per-page">
                     <label for="items-per-page-select">페이지당 항목:</label>
@@ -1819,12 +1791,9 @@
                 </div>
                 <nav class="pagination" role="navigation" aria-label="페이지네이션"></nav>
             `;
-            
             const pagination = wrapper.querySelector('.pagination');
-            
             const prevBtn = createPageButton('‹ 이전', state.currentPage - 1, state.currentPage === 1);
             pagination.appendChild(prevBtn);
-            
             const pageNumbers = getSmartPageNumbers(state.currentPage, totalPages);
             pageNumbers.forEach(page => {
                 if (page === '...') {
@@ -1838,13 +1807,10 @@
                     pagination.appendChild(btn);
                 }
             });
-            
             const nextBtn = createPageButton('다음 ›', state.currentPage + 1, state.currentPage === totalPages);
             pagination.appendChild(nextBtn);
-            
             elements.paginationWrapper.innerHTML = '';
             elements.paginationWrapper.appendChild(wrapper);
-            
             const itemsSelect = wrapper.querySelector('#items-per-page-select');
             itemsSelect.addEventListener('change', (e) => {
                 state.itemsPerPage = parseInt(e.target.value);
@@ -1859,14 +1825,12 @@
             btn.className = 'page-btn';
             btn.textContent = text;
             btn.disabled = disabled;
-            
             if (current) {
                 btn.setAttribute('aria-current', 'page');
                 btn.setAttribute('aria-label', `현재 페이지, 페이지 ${page}`);
             } else {
                 btn.setAttribute('aria-label', `페이지 ${page}로 이동`);
             }
-            
             if (!disabled && !current) {
                 btn.addEventListener('click', () => {
                     state.currentPage = page;
@@ -1874,14 +1838,12 @@
                     renderPagination();
                 });
             }
-            
             return btn;
         }
         
         function getSmartPageNumbers(current, total) {
             const pages = [];
             const delta = 2;
-            
             for (let i = 1; i <= total; i++) {
                 if (i === 1 || i === total || (i >= current - delta && i <= current + delta)) {
                     pages.push(i);
@@ -1889,7 +1851,6 @@
                     pages.push('...');
                 }
             }
-            
             return pages;
         }
         
@@ -1903,51 +1864,34 @@
             `;
         }
         
-        // ========== 개선된 이미지 Lazy Loading ==========
+        // ========== ⭐ [업데이트됨] 이미지 Lazy Loading (단순화) ==========
         
         function initLazyLoading() {
             if ('IntersectionObserver' in window) {
-                // 더 효율적인 옵션으로 설정
                 const imageObserver = new IntersectionObserver((entries, observer) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
                             const img = entry.target;
-                            loadImage(img);
-                            observer.unobserve(img);
+                            loadImage(img); // 이미지를 로드하는 함수 호출
+                            observer.unobserve(img); // 관찰 중지
                         }
                     });
                 }, {
-                    // 이미지가 뷰포트에 가까워지기 전에 미리 로드
-                    rootMargin: '100px 0px',
-                    // 10% 이상 보이면 로드 시작
+                    rootMargin: '100px 0px', // 뷰포트 100px 전에 미리 로드
                     threshold: 0.01
                 });
                 
-                // MutationObserver로 동적 이미지 감지
+                // MutationObserver는 렌더링 후 새로 추가되는 'data-src' 이미지만 감지
                 const mutationObserver = new MutationObserver((mutations) => {
                     mutations.forEach((mutation) => {
                         mutation.addedNodes.forEach((node) => {
                             if (node.nodeType === 1) {
+                                // 'data-src' 속성을 가진 이미지만 찾음
                                 const images = node.querySelectorAll ? 
                                     node.querySelectorAll('img[data-src]') : 
                                     (node.tagName === 'IMG' && node.hasAttribute('data-src') ? [node] : []);
                                 
-                                images.forEach(img => {
-                                    // 즉시 로드할 이미지인지 확인 (첫 화면)
-                                    const rect = img.getBoundingClientRect();
-                                    const isVisible = (
-                                        rect.top < window.innerHeight &&
-                                        rect.bottom > 0
-                                    );
-                                    
-                                    if (isVisible) {
-                                        // 즉시 로드
-                                        loadImage(img);
-                                    } else {
-                                        // Observer에 등록
-                                        imageObserver.observe(img);
-                                    }
-                                });
+                                images.forEach(img => imageObserver.observe(img));
                             }
                         });
                     });
@@ -1959,7 +1903,7 @@
                 });
                 
             } else {
-                // 폴백: IntersectionObserver 미지원
+                // 폴백: IntersectionObserver 미지원 시 모든 이미지를 즉시 로드
                 const loadAllImages = () => {
                     const images = elements.resultsContainer.querySelectorAll('img[data-src]');
                     images.forEach(img => loadImage(img));
@@ -1973,19 +1917,16 @@
             }
         }
         
-        // ========== 개선된 이미지 로드 함수 ==========
+        // loadImage 함수는 'data-src'를 'src'로 바꿔주는 역할만 수행
         function loadImage(img) {
             const src = img.getAttribute('data-src');
-            if (!src || img.src) return; // 이미 로드된 경우 스킵
+            if (!src || img.src) return; 
             
-            // 로딩 클래스 추가
             img.classList.add('lazy-loading');
             
-            // 새 이미지 객체로 미리 로드
             const tempImg = new Image();
             
             tempImg.onload = function() {
-                // 이미지 로드 성공
                 img.src = src;
                 img.classList.remove('lazy-loading');
                 img.classList.add('loaded');
@@ -1993,14 +1934,12 @@
             };
             
             tempImg.onerror = function() {
-                // 이미지 로드 실패 시 placeholder
                 img.src = 'data:image/svg+xml;charset=UTF-8,%3csvg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400"%3e%3crect fill="%23f7fafc" width="600" height="400"/%3e%3ctext x="50%25" y="50%25" text-anchor="middle" fill="%23718096" font-size="16" font-family="sans-serif"%3e이미지를 불러올 수 없습니다%3c/text%3e%3c/svg%3e';
                 img.classList.remove('lazy-loading');
                 img.classList.add('loaded');
                 img.removeAttribute('data-src');
             };
             
-            // 실제 로드 시작
             tempImg.src = src;
         }
         
