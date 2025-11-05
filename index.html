@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="전 세계 한인 업체 검색 - 국가, 도시, 업종별로 한인 업체를 쉽게 찾아보세요">
+    <meta name="keywords" content="한인 업체, 해외 한인, 한식당, 한인 커뮤니티">
+    <title>한인 업체 검색 - 전 세계 한인 비즈니스 디렉토리</title>
+    
+    <!-- Inter 영문 웹폰트 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Pretendard 한글 웹폰트 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+    
+    <style>
+        /* ========== CSS 리셋 및 기본 스타일 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --border-color: #e2e8f0;
+            --bg-gray: #f7fafc;
+            --white: #ffffff;
+            --yellow-star: #fbbf24;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: "Inter", "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-gray);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+            text-rendering: optimizeLegibility;
+        }
+        
+        /* 숫자 최적화 */
+        .rating-value,
+        .rating-count,
+        .selected-badge,
+        .distance-badge,
+        .page-btn {
+            font-variant-numeric: tabular-nums;
+            font-feature-settings: "tnum" 1, "kern" 1;
+        }
+        
+        /* ========== 접근성 - 스킵 링크 ========== */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            z-index: 100;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        /* ========== 포커스 스타일 ========== */
+        *:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+        
+        /* ========== 헤더 ========== */
+        .header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: visible;
+        }
+        
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .header p {
+            font-size: 1rem;
+            opacity: 0.95;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+        
+        /* ========== 컨테이너 ========== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem 3rem;
+            overflow: visible;
+        }
+        
+        /* ========== 필터 컨트롤 ========== */
+        .controls {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+            overflow: visible;
+        }
+        
+        .search-box {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 3rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23718096" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>');
+            background-repeat: no-repeat;
+            background-position: 1rem center;
+        }
+        
+        .search-box input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        
+        .dropdowns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .dropdown-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            letter-spacing: -0.01em;
+        }
+        
+        .dropdown-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: var(--white);
+        }
+        
+        .dropdown-group select:disabled {
+            background-color: var(--bg-gray);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .dropdown-group select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        
+        /* ========== 업종 필터 칩 ========== */
+        .category-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-dark);
+            display: block;
+        }
+        
+        .category-chips {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding: 0.5rem 0;
+            margin-bottom: 1rem;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--border-color);
+        }
+        
+        .category-chips::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .category-chips::-webkit-scrollbar-track {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+        
+        .category-chips::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+        
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            background: var(--white);
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 0.875rem;
+            font-weight: 500;
+            font-family: inherit;
+            transition: var(--transition);
+            user-select: none;
+        }
+        
+        .chip:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+        
+        .chip[aria-checked="true"] {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .chip.all-chip {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+            font-weight: 600;
+        }
+        
+        .chip.all-chip[aria-checked="false"] {
+            background: var(--white);
+            color: var(--text-dark);
+            border-color: var(--border-color);
+        }
+        
+        .chip-check {
+            display: none;
+            font-size: 0.75rem;
+        }
+        
+        .chip[aria-checked="true"] .chip-check {
+            display: inline;
+        }
+        
+        /* ========== 뷰 토글 및 결과 헤더 ========== */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .result-count {
+            font-size: 1rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .selected-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 24px;
+            height: 24px;
+            padding: 0 0.5rem;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            animation: pulse 0.6s ease;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .view-toggle {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--bg-gray);
+            padding: 0.25rem;
+            border-radius: 8px;
+        }
+        
+        .view-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+        
+        .view-btn[aria-pressed="true"] {
+            background: var(--white);
+            color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .view-btn:hover {
+            color: var(--primary-color);
+        }
+        
+        /* ========== 로딩 상태 ========== */
+        .loading-state {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ========== 에러 상태 ========== */
+        .error-state {
+            background: #fff5f5;
+            border: 2px solid #fc8181;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .error-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .error-message {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #c53030;
+            margin-bottom: 0.5rem;
+        }
+        
+        .error-details {
+            color: #742a2a;
+            font-size: 0.875rem;
+        }
+        
+        /* ========== 빈 상태 ========== */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-light);
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-message {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-hint {
+            font-size: 0.875rem;
+        }
+        
+        /* ========== 평점 스타일 ========== */
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .rating-stars {
+            display: flex;
+            align-items: center;
+            gap: 0.125rem;
+            color: var(--yellow-star);
+            font-size: 1rem;
+        }
+        
+        .rating-value {
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+        
+        .rating-count {
+            color: var(--text-light);
+            font-size: 0.8125rem;
+        }
+        
+        .distance-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.625rem;
+            background: var(--bg-gray);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        /* ========== 카드 뷰 ========== */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            overflow: visible;
+        }
+        
+        .business-card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            overflow: visible;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .business-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        /* ========== 이미지 최적화 개선 ========== */
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: var(--bg-gray);
+            border-radius: 12px 12px 0 0;
+            /* 이미지가 로드될 때까지 부드러운 전환 */
+            transition: opacity 0.3s ease;
+        }
+        
+        /* 로딩 중 skeleton 애니메이션 */
+        .card-image[data-src]:not([src]),
+        .card-image.lazy-loading {
+            background: linear-gradient(
+                90deg,
+                var(--bg-gray) 0%,
+                #e2e8f0 20%,
+                var(--bg-gray) 40%,
+                var(--bg-gray) 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 1.5s ease-in-out infinite;
+            opacity: 0.7;
+        }
+        
+        /* 이미지 로드 완료 시 */
+        .card-image.loaded {
+            opacity: 1;
+            animation: none;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: visible;
+        }
+        
+        .card-content h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+        }
+        
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.375rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .card-feature {
+            font-style: italic;
+            color: var(--text-light);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        .info-icon {
+            min-width: 16px;
+            margin-top: 2px;
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .action-btn {
+            flex-grow: 1;
+            min-width: 80px;
+            padding: 0.625rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--white);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-family: inherit;
+            text-decoration: none;
+            color: var(--text-dark);
+            text-align: center;
+            transition: var(--transition);
+            display: inline-block;
+            letter-spacing: -0.01em;
+        }
+        
+        .action-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: scale(1.05);
+        }
+        
+        /* ========== 테이블 뷰 ========== */
+        .table-container {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .business-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .business-table thead {
+            background: var(--bg-gray);
+        }
+        
+        .business-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
+        }
+        
+        .business-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.875rem;
+        }
+        
+        .business-table tbody tr:hover {
+            background: var(--bg-gray);
+        }
+        
+        .table-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: opacity 0.3s ease;
+        }
+        
+        .table-image[data-src]:not([src]),
+        .table-image.lazy-loading {
+            background: linear-gradient(90deg, var(--bg-gray) 0%, #e2e8f0 50%, var(--bg-gray) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            opacity: 0.7;
+        }
+        
+        .table-image.loaded {
+            opacity: 1;
+            animation: none;
+        }
+        
+        .table-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 0.375rem;
+            flex-wrap: nowrap;
+        }
+        
+        .table-action-btn {
+            padding: 0.375rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--white);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-family: inherit;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        
+        .table-action-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        /* ========== 페이지네이션 ========== */
+        .pagination-wrapper {
+            margin-top: 2rem;
+            padding-bottom: 2rem;
+            overflow: visible;
+        }
+        
+        .items-per-page {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .items-per-page select {
+            padding: 0.5rem 2rem 0.5rem 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-family: inherit;
+            cursor: pointer;
+            background-color: var(--white);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            overflow: visible;
+        }
+        
+        .page-btn {
+            min-width: 40px;
+            height: 40px;
+            padding: 0.5rem 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--white);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--text-dark);
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .page-btn:hover:not(:disabled) {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .page-btn[aria-current="page"] {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .page-ellipsis {
+            padding: 0.5rem;
+            color: var(--text-light);
+        }
+        
+        /* ========== 위치 알림 ========== */
+        .location-notice {
+            background: #edf2f7;
+            border: 2px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .location-notice.success {
+            background: #f0fdf4;
+            border-color: #86efac;
+            color: #166534;
+        }
+        
+        .location-notice.error {
+            background: #fef2f2;
+            border-color: #fca5a5;
+            color: #991b1b;
+        }
+        
+        .location-notice.info {
+            background: #eff6ff;
+            border-color: #93c5fd;
+            color: #1e40af;
+        }
+        
+        .location-btn {
+            flex-shrink: 0;
+        }
+        
+        .location-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        .location-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* ========== 반응형 디자인 ========== */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+                letter-spacing: -0.02em;
+            }
+            
+            .header p {
+                font-size: 0.875rem;
+                letter-spacing: -0.01em;
+            }
+            
+            .dropdowns {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .view-toggle {
+                display: none;
+            }
+            
+            .table-container {
+                display: none;
+            }
+            
+            .action-btn {
+                flex: 0 0 calc(50% - 0.25rem);
+                min-width: 0;
+            }
+        }
+        
+        /* ========== 인쇄 스타일 ========== */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .controls,
+            .view-toggle,
+            .pagination-wrapper,
+            .skip-link,
+            .location-notice {
+                display: none !important;
+            }
+            
+            .header {
+                background: none;
+                color: black;
+                border-bottom: 2px solid black;
+            }
+            
+            .business-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+                margin-bottom: 1rem;
+            }
+            
+            .card-actions {
+                display: none;
+            }
+        }
+        
+        /* ========== 숨김 클래스 ========== */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">본문으로 바로가기</a>
+    
+    <header class="header">
+        <h1>🌏 전 세계 한인 업체 검색</h1>
+        <p>국가, 도시, 업종별로 한인 업체를 쉽게 찾아보세요</p>
+    </header>
+    
+    <main class="container" id="main-content" role="main">
+        <section class="controls" role="search" aria-label="검색 필터">
+            <div id="location-notice" class="location-notice hidden" role="status" aria-live="polite"></div>
+            
+            <div class="search-box">
+                <label for="search-input" class="sr-only">업체 검색</label>
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    placeholder="업체명, 주소, 특징으로 검색..." 
+                    aria-label="업체명, 주소, 특징으로 검색"
+                    autocomplete="off"
+                />
+            </div>
+            
+            <div class="dropdowns">
+                <div class="dropdown-group">
+                    <label for="country-select">국가</label>
+                    <select id="country-select" aria-label="국가 선택">
+                        <option value="">전체 국가</option>
+                    </select>
+                </div>
+                <div class="dropdown-group">
+                    <label for="city-select">도시</label>
+                    <select id="city-select" aria-label="도시 선택" disabled>
+                        <option value="">국가를 먼저 선택하세요</option>
+                    </select>
+                </div>
+                <div class="dropdown-group">
+                    <label for="sort-select">정렬</label>
+                    <select id="sort-select" aria-label="정렬 방식 선택">
+                        <option value="rating">평점순</option>
+                        <option value="reviews">후기순</option>
+                        <option value="distance">거리순</option>
+                    </select>
+                </div>
+            </div>
+            
+            <label class="category-label">업종</label>
+            <div 
+                class="category-chips" 
+                role="group" 
+                aria-label="업종 선택"
+                id="category-chips"
+            ></div>
+        </section>
+        
+        <div class="results-header">
+            <div class="result-count" role="status" aria-live="polite" id="result-count">
+                검색 결과: <strong>0개</strong>
+            </div>
+            <div class="view-toggle" role="tablist" aria-label="보기 방식">
+                <button 
+                    class="view-btn" 
+                    id="card-view-btn" 
+                    role="tab"
+                    aria-pressed="true"
+                    aria-controls="results-container"
+                >
+                    카드 보기
+                </button>
+                <button 
+                    class="view-btn" 
+                    id="table-view-btn"
+                    role="tab"
+                    aria-pressed="false"
+                    aria-controls="results-container"
+                >
+                    테이블 보기
+                </button>
+            </div>
+        </div>
+        
+        <div id="results-container" role="region" aria-live="polite"></div>
+        
+        <div class="pagination-wrapper" id="pagination-wrapper"></div>
+    </main>
+    
+    <script>
+    (function() {
+        'use strict';
+        
+        // ========== 유틸리티 함수 ==========
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function validateInput(value, maxLength = 100) {
+            if (typeof value !== 'string') return false;
+            if (value.length > maxLength) return false;
+            const dangerousPatterns = /<script|javascript:|onerror=|onclick=/i;
+            return !dangerousPatterns.test(value);
+        }
+        
+        function logError(error, context) {
+            console.error(`[${context}] Error:`, error);
+        }
+        
+        function smoothScrollTo(element) {
+            if (!element) return;
+            const headerHeight = 100;
+            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - headerHeight;
+            
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+        
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = 
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+        
+        function formatDistance(distance) {
+            if (distance < 1) {
+                return `${Math.round(distance * 1000)}m`;
+            } else if (distance < 10) {
+                return `${distance.toFixed(1)}km`;
+            } else {
+                return `${Math.round(distance)}km`;
+            }
+        }
+        
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            let stars = '';
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '★';
+            }
+            if (hasHalfStar) {
+                stars += '★';
+            }
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '☆';
+            }
+            
+            return stars;
+        }
+        
+        // ========== 데이터 ==========
+        
+        let businessData = [];
+        
+        // ⚠️ 여기에 Google Apps Script 웹 앱 URL을 입력하세요
+        const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby3ewdRdV7NI4s8oMUznLAb-rO5genjjF0MfNDenCoeoRreQakSNXcnFoLHjeb5RZ6S1w/exec';
+        
+        async function fetchData() {
+            console.log('데이터 가져오기 시작...');
+            try {
+                const response = await fetch(GAS_WEB_APP_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(`Apps Script Error: ${data.error}`);
+                }
+                
+                console.log('데이터 가져오기 성공:', data);
+                return data;
+            } catch (error) {
+                console.error('데이터를 가져오는 중 오류 발생:', error);
+                logError(error, 'fetchData');
+                throw error;
+            }
+        }
+        
+        // ========== 상태 관리 ==========
+        
+        const state = {
+            currentView: 'card',
+            filteredData: [],
+            currentPage: 1,
+            itemsPerPage: 12, // 초기값을 12로 줄임
+            selectedCategories: new Set(),
+            searchQuery: '',
+            selectedCountry: '',
+            selectedCity: '',
+            sortBy: 'rating',
+            userLocation: null,
+            isLoading: false,
+            error: null
+        };
+        
+        // ========== DOM 요소 ==========
+        
+        const elements = {
+            searchInput: document.getElementById('search-input'),
+            countrySelect: document.getElementById('country-select'),
+            citySelect: document.getElementById('city-select'),
+            sortSelect: document.getElementById('sort-select'),
+            categoryChips: document.getElementById('category-chips'),
+            cardViewBtn: document.getElementById('card-view-btn'),
+            tableViewBtn: document.getElementById('table-view-btn'),
+            resultsContainer: document.getElementById('results-container'),
+            resultCount: document.getElementById('result-count'),
+            paginationWrapper: document.getElementById('pagination-wrapper'),
+            locationNotice: document.getElementById('location-notice')
+        };
+        
+        let searchTimeout = null;
+        
+        // ========== 초기화 ==========
+        
+        async function init() {
+            try {
+                state.isLoading = true;
+                state.error = null;
+                renderResults();
+                
+                businessData = await fetchData();
+                
+                state.isLoading = false;
+                state.filteredData = [...businessData];
+                
+                populateCountries();
+                populateCategories();
+                setupEventListeners();
+                getUserLocation();
+                
+                renderResults();
+                renderPagination();
+                updateResultCount();
+                
+                // 개선된 Lazy Loading 초기화
+                initLazyLoading();
+                
+            } catch (error) {
+                logError(error, 'init');
+                state.isLoading = false;
+                state.error = '데이터를 불러오는 데 실패했습니다. Apps Script URL과 시트 이름을 확인해주세요.';
+                renderResults();
+            }
+        }
+        
+        // ========== 위치 기능 ==========
+        
+        /**
+         * 사용자 위치 가져오기 (Wix iframe 환경 대응)
+         */
+        function getUserLocation() {
+            // Wix iframe 환경 감지
+            const isInIframe = window.self !== window.top;
+            
+            if (!navigator.geolocation) {
+                showLocationNotice('위치 서비스를 지원하지 않는 브라우저입니다. 거리순 정렬은 사용할 수 없습니다.', 'info');
+                disableDistanceSort();
+                return;
+            }
+            
+            // iframe 환경이거나 일반 환경 모두 사용자가 선택하도록 변경
+            console.log(isInIframe ? 'iframe 환경이 감지되었습니다.' : '위치 정보는 선택사항입니다.');
+            showLocationNotice('💡 거리순 정렬을 원하시면 아래 버튼을 클릭하세요.', 'info');
+            createLocationButton();
+            disableDistanceSort();
+        }
+        
+        /**
+         * 위치 정보 요청 버튼 생성
+         */
+        function createLocationButton() {
+            const existingButton = elements.locationNotice.querySelector('.location-btn');
+            if (existingButton) return;
+            
+            const button = document.createElement('button');
+            button.className = 'location-btn';
+            button.innerHTML = '📍 내 위치 사용하기';
+            button.style.cssText = `
+                margin-left: 0.5rem;
+                padding: 0.5rem 1rem;
+                background: var(--primary-gradient);
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 0.875rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: var(--transition);
+            `;
+            
+            button.addEventListener('click', requestUserLocation);
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+            });
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+            
+            elements.locationNotice.appendChild(button);
+        }
+        
+        /**
+         * 실제 위치 정보 요청
+         */
+        function requestUserLocation() {
+            showLocationNotice('📍 위치 정보를 가져오는 중...', 'info');
+            
+            const options = {
+                enableHighAccuracy: false,
+                timeout: 10000,
+                maximumAge: 300000 // 5분 캐시
+            };
+            
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    state.userLocation = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    };
+                    
+                    businessData.forEach(business => {
+                        business.distance = calculateDistance(
+                            state.userLocation.latitude,
+                            state.userLocation.longitude,
+                            business.latitude,
+                            business.longitude
+                        );
+                    });
+                    
+                    showLocationNotice('✅ 위치 정보를 가져왔습니다! 이제 거리순 정렬이 가능합니다.', 'success');
+                    enableDistanceSort();
+                    
+                    if (state.sortBy === 'distance') {
+                        handleFilterChange();
+                    }
+                    
+                    setTimeout(() => {
+                        elements.locationNotice.classList.add('hidden');
+                    }, 3000);
+                },
+                (error) => {
+                    console.warn('위치 정보 가져오기 실패:', error);
+                    
+                    let errorMessage = '⚠️ 위치 정보를 가져올 수 없습니다. ';
+                    
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMessage += '브라우저 설정에서 위치 권한을 허용해주세요.';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMessage += '위치 정보를 사용할 수 없습니다.';
+                            break;
+                        case error.TIMEOUT:
+                            errorMessage += '위치 정보 요청 시간이 초과되었습니다.';
+                            break;
+                        default:
+                            errorMessage += '알 수 없는 오류가 발생했습니다.';
+                    }
+                    
+                    showLocationNotice(errorMessage, 'error');
+                    
+                    if (state.sortBy === 'distance') {
+                        state.sortBy = 'rating';
+                        elements.sortSelect.value = 'rating';
+                        handleFilterChange();
+                    }
+                    
+                    disableDistanceSort();
+                    
+                    setTimeout(() => {
+                        elements.locationNotice.classList.add('hidden');
+                    }, 10000);
+                },
+                options
+            );
+        }
+        
+        /**
+         * 거리순 정렬 비활성화
+         */
+        function disableDistanceSort() {
+            const distanceOption = elements.sortSelect.querySelector('option[value="distance"]');
+            if (distanceOption) {
+                distanceOption.disabled = true;
+                distanceOption.textContent = '거리순 (위치 정보 필요)';
+            }
+        }
+        
+        /**
+         * 거리순 정렬 활성화
+         */
+        function enableDistanceSort() {
+            const distanceOption = elements.sortSelect.querySelector('option[value="distance"]');
+            if (distanceOption) {
+                distanceOption.disabled = false;
+                distanceOption.textContent = '거리순';
+            }
+        }
+        
+        function showLocationNotice(message, type) {
+            elements.locationNotice.textContent = message;
+            elements.locationNotice.className = `location-notice ${type}`;
+            elements.locationNotice.classList.remove('hidden');
+        }
+        
+        // ========== 데이터 처리 ==========
+        
+        function populateCountries() {
+            const countries = [...new Set(businessData.map(b => b.country))].sort();
+            
+            elements.countrySelect.innerHTML = '<option value="">전체 국가</option>';
+            countries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country;
+                option.textContent = country;
+                elements.countrySelect.appendChild(option);
+            });
+        }
+        
+        function populateCities(country) {
+            if (!country) {
+                elements.citySelect.innerHTML = '<option value="">국가를 먼저 선택하세요</option>';
+                elements.citySelect.disabled = true;
+                return;
+            }
+            
+            const cities = [...new Set(
+                businessData
+                    .filter(b => b.country === country)
+                    .map(b => b.city)
+            )].sort();
+            
+            elements.citySelect.innerHTML = '<option value="">전체 도시</option>';
+            cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                elements.citySelect.appendChild(option);
+            });
+            
+            elements.citySelect.disabled = false;
+        }
+        
+        function populateCategories() {
+            const categories = new Set();
+            businessData.forEach(business => {
+                business.services.forEach(service => categories.add(service));
+            });
+            
+            const sortedCategories = ['전체', ...Array.from(categories).sort()];
+            
+            elements.categoryChips.innerHTML = '';
+            sortedCategories.forEach((category, index) => {
+                const chip = document.createElement('button');
+                chip.className = category === '전체' ? 'chip all-chip' : 'chip';
+                chip.setAttribute('role', 'checkbox');
+                chip.setAttribute('aria-checked', category === '전체' ? 'true' : 'false');
+                chip.setAttribute('aria-label', `${category} 선택`);
+                chip.setAttribute('tabindex', index === 0 ? '0' : '-1');
+                chip.dataset.category = category;
+                
+                chip.innerHTML = `
+                    <span class="chip-check">✓</span>
+                    <span>${category === '전체' ? '✨ ' : ''}${escapeHtml(category)}</span>
+                `;
+                
+                chip.addEventListener('click', () => handleCategoryClick(category));
+                elements.categoryChips.appendChild(chip);
+            });
+            
+            state.selectedCategories.add('전체');
+        }
+        
+        // ========== 이벤트 핸들러 ==========
+        
+        function setupEventListeners() {
+            elements.searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    const value = e.target.value;
+                    if (validateInput(value, 200)) {
+                        state.searchQuery = value.trim();
+                        handleFilterChange();
+                    }
+                }, 300);
+            });
+            
+            elements.countrySelect.addEventListener('change', (e) => {
+                state.selectedCountry = e.target.value;
+                state.selectedCity = '';
+                elements.citySelect.value = '';
+                populateCities(e.target.value);
+                handleFilterChange();
+            });
+            
+            elements.citySelect.addEventListener('change', (e) => {
+                state.selectedCity = e.target.value;
+                handleFilterChange();
+            });
+            
+            elements.sortSelect.addEventListener('change', (e) => {
+                state.sortBy = e.target.value;
+                
+                if (state.sortBy === 'distance' && !state.userLocation) {
+                    showLocationNotice('⚠️ 위치 정보가 없습니다. 위치 권한을 허용해주세요.', 'error');
+                    getUserLocation();
+                }
+                
+                handleFilterChange();
+            });
+            
+            elements.cardViewBtn.addEventListener('click', () => switchView('card'));
+            elements.tableViewBtn.addEventListener('click', () => switchView('table'));
+            
+            elements.categoryChips.addEventListener('keydown', handleChipKeyboard);
+        }
+        
+        function handleCategoryClick(category) {
+            if (category === '전체') {
+                if (state.selectedCategories.has('전체')) {
+                    state.selectedCategories.clear();
+                } else {
+                    state.selectedCategories.clear();
+                    state.selectedCategories.add('전체');
+                }
+            } else {
+                state.selectedCategories.delete('전체');
+                
+                if (state.selectedCategories.has(category)) {
+                    state.selectedCategories.delete(category);
+                    
+                    if (state.selectedCategories.size === 0) {
+                        state.selectedCategories.add('전체');
+                    }
+                } else {
+                    state.selectedCategories.add(category);
+                }
+            }
+            
+            updateChipStates();
+            handleFilterChange();
+        }
+        
+        function updateChipStates() {
+            const chips = elements.categoryChips.querySelectorAll('.chip');
+            chips.forEach(chip => {
+                const category = chip.dataset.category;
+                const isSelected = state.selectedCategories.has(category);
+                chip.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+            });
+        }
+        
+        function handleChipKeyboard(e) {
+            const chips = Array.from(elements.categoryChips.querySelectorAll('.chip'));
+            const currentIndex = chips.findIndex(chip => chip === document.activeElement);
+            
+            if (currentIndex === -1) return;
+            
+            let newIndex = currentIndex;
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    newIndex = Math.max(0, currentIndex - 1);
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    newIndex = Math.min(chips.length - 1, currentIndex + 1);
+                    break;
+                case 'Enter':
+                case ' ':
+                    e.preventDefault();
+                    chips[currentIndex].click();
+                    return;
+                default:
+                    return;
+            }
+            
+            chips.forEach((chip, idx) => {
+                chip.setAttribute('tabindex', idx === newIndex ? '0' : '-1');
+            });
+            chips[newIndex].focus();
+        }
+        
+        function handleFilterChange() {
+            state.currentPage = 1;
+            
+            setTimeout(() => {
+                try {
+                    applyFilters();
+                    applySorting();
+                    renderResults();
+                    renderPagination();
+                    updateResultCount();
+                } catch (error) {
+                    logError(error, 'handleFilterChange');
+                    showError('필터 적용 중 오류가 발생했습니다.');
+                }
+            }, 50);
+        }
+        
+        function applyFilters() {
+            state.filteredData = businessData.filter(business => {
+                if (state.searchQuery) {
+                    const searchLower = state.searchQuery.toLowerCase();
+                    const matchesSearch = 
+                        business.businessName.toLowerCase().includes(searchLower) ||
+                        business.address.toLowerCase().includes(searchLower) ||
+                        business.feature.toLowerCase().includes(searchLower);
+                    
+                    if (!matchesSearch) return false;
+                }
+                
+                if (state.selectedCountry && business.country !== state.selectedCountry) {
+                    return false;
+                }
+                
+                if (state.selectedCity && business.city !== state.selectedCity) {
+                    return false;
+                }
+                
+                if (!state.selectedCategories.has('전체')) {
+                    const hasMatchingService = business.services.some(service => 
+                        state.selectedCategories.has(service)
+                    );
+                    if (!hasMatchingService) return false;
+                }
+                
+                return true;
+            });
+        }
+        
+        function applySorting() {
+            switch(state.sortBy) {
+                case 'rating':
+                    state.filteredData.sort((a, b) => b.rating - a.rating);
+                    break;
+                case 'reviews':
+                    state.filteredData.sort((a, b) => b.reviewCount - a.reviewCount);
+                    break;
+                case 'distance':
+                    if (state.userLocation) {
+                        state.filteredData.sort((a, b) => (a.distance || 9999) - (b.distance || 9999));
+                    }
+                    break;
+            }
+        }
+        
+        function switchView(view) {
+            state.currentView = view;
+            
+            elements.cardViewBtn.setAttribute('aria-pressed', view === 'card');
+            elements.tableViewBtn.setAttribute('aria-pressed', view === 'table');
+            
+            renderResults();
+        }
+        
+        // ========== 렌더링 ==========
+        
+        function renderResults() {
+            try {
+                elements.resultsContainer.innerHTML = '';
+                
+                if (state.isLoading) {
+                    elements.resultsContainer.innerHTML = `
+                        <div class="loading-state" role="status">
+                            <div class="loading-spinner" aria-label="데이터를 불러오는 중"></div>
+                            <p>데이터를 불러오는 중...</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                if (state.error) {
+                    showError(state.error);
+                    return;
+                }
+                
+                if (state.filteredData.length === 0) {
+                    const hasFilters = state.searchQuery || state.selectedCountry || 
+                                     state.selectedCity || !state.selectedCategories.has('전체');
+                    
+                    elements.resultsContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">${hasFilters ? '😢' : '🔍'}</div>
+                            <div class="empty-message">
+                                ${hasFilters ? '검색 결과가 없습니다' : '업체를 검색해보세요'}
+                            </div>
+                            <div class="empty-hint">
+                                ${hasFilters ? '다른 검색 조건을 시도해보세요' : '위의 필터를 사용하여 업체를 찾아보세요'}
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const startIndex = (state.currentPage - 1) * state.itemsPerPage;
+                const endIndex = startIndex + state.itemsPerPage;
+                const pageData = state.filteredData.slice(startIndex, endIndex);
+                
+                if (state.currentView === 'card') {
+                    renderCardView(pageData);
+                } else {
+                    renderTableView(pageData);
+                }
+                
+                smoothScrollTo(elements.resultsContainer);
+                
+            } catch (error) {
+                logError(error, 'renderResults');
+                showError('결과를 표시하는 중 오류가 발생했습니다.');
+            }
+        }
+        
+        // ========== 개선된 카드 뷰 렌더링 ==========
+        function renderCardView(data) {
+            const grid = document.createElement('div');
+            grid.className = 'card-grid';
+            
+            data.forEach(business => {
+                const card = document.createElement('article');
+                card.className = 'business-card';
+                card.setAttribute('role', 'article');
+                card.setAttribute('aria-label', `${business.businessName} 업체 정보`);
+                
+                // 개선된 이미지 처리: loading="lazy" 속성 추가
+                const imgHtml = `
+                    <img 
+                        class="card-image" 
+                        data-src="${escapeHtml(business.image)}"
+                        alt="${escapeHtml(business.businessName)}"
+                        loading="lazy"
+                    />
+                `;
+                
+                const stars = generateStars(business.rating);
+                const ratingHtml = `
+                    <div class="rating">
+                        <span class="rating-stars" aria-label="${business.rating}점">${stars}</span>
+                        <span class="rating-value">${business.rating}</span>
+                        <span class="rating-count">(${business.reviewCount})</span>
+                        ${business.distance !== undefined && state.userLocation ? 
+                            `<span class="distance-badge">📍 ${formatDistance(business.distance)}</span>` : ''}
+                    </div>
+                `;
+                
+                const tagsHtml = business.services
+                    .map(service => `<span class="tag">${escapeHtml(service)}</span>`)
+                    .join('');
+                
+                const emailBtn = business.email ? 
+                    `<a href="mailto:${escapeHtml(business.email)}" class="action-btn" aria-label="이메일 보내기">📧 이메일</a>` : '';
+                
+                const websiteBtn = business.website ? 
+                    `<a href="https://${escapeHtml(business.website)}" class="action-btn" target="_blank" rel="noopener noreferrer" aria-label="홈페이지 방문">🌐 홈페이지</a>` : '';
+                
+                card.innerHTML = `
+                    ${imgHtml}
+                    <div class="card-content">
+                        <h3>${escapeHtml(business.businessName)}</h3>
+                        ${ratingHtml}
+                        <div class="card-tags">${tagsHtml}</div>
+                        <p class="card-feature">${escapeHtml(business.feature)}</p>
+                        <div class="card-info">
+                            <div class="info-item">
+                                <span class="info-icon">📍</span>
+                                <span>${escapeHtml(business.address)}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-icon">🕐</span>
+                                <span>${escapeHtml(business.hours)}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-icon">📞</span>
+                                <span>${escapeHtml(business.phone)}</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="tel:${escapeHtml(business.phone)}" class="action-btn" aria-label="전화 걸기">📞 전화</a>
+                            <a href="${escapeHtml(business.googleMapsUrl)}" class="action-btn" target="_blank" rel="noopener noreferrer" aria-label="지도에서 보기">📍 지도</a>
+                            ${emailBtn}
+                            ${websiteBtn}
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+            
+            elements.resultsContainer.appendChild(grid);
+        }
+        
+        // ========== 개선된 테이블 뷰 렌더링 ==========
+        function renderTableView(data) {
+            const container = document.createElement('div');
+            container.className = 'table-container';
+            
+            const table = document.createElement('table');
+            table.className = 'business-table';
+            table.setAttribute('role', 'table');
+            
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th scope="col">이미지</th>
+                        <th scope="col">업체명</th>
+                        <th scope="col">평점</th>
+                        <th scope="col">위치</th>
+                        <th scope="col">서비스</th>
+                        <th scope="col">연락처</th>
+                        <th scope="col">액션</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            `;
+            
+            const tbody = table.querySelector('tbody');
+            
+            data.forEach(business => {
+                const row = document.createElement('tr');
+                
+                const stars = generateStars(business.rating);
+                const ratingHtml = `
+                    <div class="rating">
+                        <span class="rating-stars">${stars}</span>
+                        <span class="rating-value">${business.rating}</span>
+                        <span class="rating-count">(${business.reviewCount})</span>
+                    </div>
+                `;
+                
+                const tagsHtml = business.services
+                    .map(service => `<span class="tag">${escapeHtml(service)}</span>`)
+                    .join('');
+                
+                const emailBtn = business.email ? 
+                    `<a href="mailto:${escapeHtml(business.email)}" class="table-action-btn">📧</a>` : '';
+                
+                const websiteBtn = business.website ? 
+                    `<a href="https://${escapeHtml(business.website)}" class="table-action-btn" target="_blank" rel="noopener noreferrer">🌐</a>` : '';
+                
+                row.innerHTML = `
+                    <td>
+                        <img 
+                            class="table-image" 
+                            data-src="${escapeHtml(business.image)}" 
+                            alt="${escapeHtml(business.businessName)}"
+                            loading="lazy"
+                        />
+                    </td>
+                    <td><strong>${escapeHtml(business.businessName)}</strong></td>
+                    <td>${ratingHtml}</td>
+                    <td>${escapeHtml(business.city)}, ${escapeHtml(business.country)}</td>
+                    <td><div class="table-tags">${tagsHtml}</div></td>
+                    <td>${escapeHtml(business.phone)}</td>
+                    <td>
+                        <div class="table-actions">
+                            <a href="tel:${escapeHtml(business.phone)}" class="table-action-btn">📞</a>
+                            <a href="${escapeHtml(business.googleMapsUrl)}" class="table-action-btn" target="_blank" rel="noopener noreferrer">📍</a>
+                            ${emailBtn}
+                            ${websiteBtn}
+                        </div>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            container.appendChild(table);
+            elements.resultsContainer.appendChild(container);
+        }
+        
+        function updateResultCount() {
+            const count = state.filteredData.length;
+            const selectedCount = state.selectedCategories.size - (state.selectedCategories.has('전체') ? 1 : 0);
+            
+            const badge = selectedCount > 0 ? 
+                `<span class="selected-badge" aria-label="${selectedCount}개 업종 선택됨">${selectedCount}</span>` : '';
+            
+            elements.resultCount.innerHTML = `
+                검색 결과: <strong>${count}개</strong>
+                ${badge}
+            `;
+        }
+        
+        function renderPagination() {
+            if (state.filteredData.length === 0) {
+                elements.paginationWrapper.innerHTML = '';
+                return;
+            }
+            
+            const totalPages = Math.ceil(state.filteredData.length / state.itemsPerPage);
+            
+            if (totalPages <= 1) {
+                elements.paginationWrapper.innerHTML = '';
+                return;
+            }
+            
+            const wrapper = document.createElement('div');
+            
+            wrapper.innerHTML = `
+                <div class="items-per-page">
+                    <label for="items-per-page-select">페이지당 항목:</label>
+                    <select id="items-per-page-select" aria-label="페이지당 표시할 항목 수">
+                        <option value="12" ${state.itemsPerPage === 12 ? 'selected' : ''}>12개</option>
+                        <option value="20" ${state.itemsPerPage === 20 ? 'selected' : ''}>20개</option>
+                        <option value="50" ${state.itemsPerPage === 50 ? 'selected' : ''}>50개</option>
+                        <option value="100" ${state.itemsPerPage === 100 ? 'selected' : ''}>100개</option>
+                    </select>
+                </div>
+                <nav class="pagination" role="navigation" aria-label="페이지네이션"></nav>
+            `;
+            
+            const pagination = wrapper.querySelector('.pagination');
+            
+            const prevBtn = createPageButton('‹ 이전', state.currentPage - 1, state.currentPage === 1);
+            pagination.appendChild(prevBtn);
+            
+            const pageNumbers = getSmartPageNumbers(state.currentPage, totalPages);
+            pageNumbers.forEach(page => {
+                if (page === '...') {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'page-ellipsis';
+                    ellipsis.textContent = '...';
+                    ellipsis.setAttribute('aria-hidden', 'true');
+                    pagination.appendChild(ellipsis);
+                } else {
+                    const btn = createPageButton(page.toString(), page, false, page === state.currentPage);
+                    pagination.appendChild(btn);
+                }
+            });
+            
+            const nextBtn = createPageButton('다음 ›', state.currentPage + 1, state.currentPage === totalPages);
+            pagination.appendChild(nextBtn);
+            
+            elements.paginationWrapper.innerHTML = '';
+            elements.paginationWrapper.appendChild(wrapper);
+            
+            const itemsSelect = wrapper.querySelector('#items-per-page-select');
+            itemsSelect.addEventListener('change', (e) => {
+                state.itemsPerPage = parseInt(e.target.value);
+                state.currentPage = 1;
+                renderResults();
+                renderPagination();
+            });
+        }
+        
+        function createPageButton(text, page, disabled = false, current = false) {
+            const btn = document.createElement('button');
+            btn.className = 'page-btn';
+            btn.textContent = text;
+            btn.disabled = disabled;
+            
+            if (current) {
+                btn.setAttribute('aria-current', 'page');
+                btn.setAttribute('aria-label', `현재 페이지, 페이지 ${page}`);
+            } else {
+                btn.setAttribute('aria-label', `페이지 ${page}로 이동`);
+            }
+            
+            if (!disabled && !current) {
+                btn.addEventListener('click', () => {
+                    state.currentPage = page;
+                    renderResults();
+                    renderPagination();
+                });
+            }
+            
+            return btn;
+        }
+        
+        function getSmartPageNumbers(current, total) {
+            const pages = [];
+            const delta = 2;
+            
+            for (let i = 1; i <= total; i++) {
+                if (i === 1 || i === total || (i >= current - delta && i <= current + delta)) {
+                    pages.push(i);
+                } else if (pages[pages.length - 1] !== '...') {
+                    pages.push('...');
+                }
+            }
+            
+            return pages;
+        }
+        
+        function showError(message) {
+            elements.resultsContainer.innerHTML = `
+                <div class="error-state" role="alert">
+                    <div class="error-icon">⚠️</div>
+                    <div class="error-message">오류 발생</div>
+                    <div class="error-details">${escapeHtml(message)}</div>
+                </div>
+            `;
+        }
+        
+        // ========== 개선된 이미지 Lazy Loading ==========
+        
+        function initLazyLoading() {
+            if ('IntersectionObserver' in window) {
+                // 더 효율적인 옵션으로 설정
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            loadImage(img);
+                            observer.unobserve(img);
+                        }
+                    });
+                }, {
+                    // 이미지가 뷰포트에 가까워지기 전에 미리 로드
+                    rootMargin: '100px 0px',
+                    // 10% 이상 보이면 로드 시작
+                    threshold: 0.01
+                });
+                
+                // MutationObserver로 동적 이미지 감지
+                const mutationObserver = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        mutation.addedNodes.forEach((node) => {
+                            if (node.nodeType === 1) {
+                                const images = node.querySelectorAll ? 
+                                    node.querySelectorAll('img[data-src]') : 
+                                    (node.tagName === 'IMG' && node.hasAttribute('data-src') ? [node] : []);
+                                
+                                images.forEach(img => {
+                                    // 즉시 로드할 이미지인지 확인 (첫 화면)
+                                    const rect = img.getBoundingClientRect();
+                                    const isVisible = (
+                                        rect.top < window.innerHeight &&
+                                        rect.bottom > 0
+                                    );
+                                    
+                                    if (isVisible) {
+                                        // 즉시 로드
+                                        loadImage(img);
+                                    } else {
+                                        // Observer에 등록
+                                        imageObserver.observe(img);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                });
+                
+                mutationObserver.observe(elements.resultsContainer, {
+                    childList: true,
+                    subtree: true
+                });
+                
+            } else {
+                // 폴백: IntersectionObserver 미지원
+                const loadAllImages = () => {
+                    const images = elements.resultsContainer.querySelectorAll('img[data-src]');
+                    images.forEach(img => loadImage(img));
+                };
+                
+                const mutationObserver = new MutationObserver(loadAllImages);
+                mutationObserver.observe(elements.resultsContainer, {
+                    childList: true,
+                    subtree: true
+                });
+            }
+        }
+        
+        // ========== 개선된 이미지 로드 함수 ==========
+        function loadImage(img) {
+            const src = img.getAttribute('data-src');
+            if (!src || img.src) return; // 이미 로드된 경우 스킵
+            
+            // 로딩 클래스 추가
+            img.classList.add('lazy-loading');
+            
+            // 새 이미지 객체로 미리 로드
+            const tempImg = new Image();
+            
+            tempImg.onload = function() {
+                // 이미지 로드 성공
+                img.src = src;
+                img.classList.remove('lazy-loading');
+                img.classList.add('loaded');
+                img.removeAttribute('data-src');
+            };
+            
+            tempImg.onerror = function() {
+                // 이미지 로드 실패 시 placeholder
+                img.src = 'data:image/svg+xml;charset=UTF-8,%3csvg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400"%3e%3crect fill="%23f7fafc" width="600" height="400"/%3e%3ctext x="50%25" y="50%25" text-anchor="middle" fill="%23718096" font-size="16" font-family="sans-serif"%3e이미지를 불러올 수 없습니다%3c/text%3e%3c/svg%3e';
+                img.classList.remove('lazy-loading');
+                img.classList.add('loaded');
+                img.removeAttribute('data-src');
+            };
+            
+            // 실제 로드 시작
+            tempImg.src = src;
+        }
+        
+        // ========== 앱 시작 ==========
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+        
+    })();
+    </script>
+</body>
+</html>
