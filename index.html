@@ -617,9 +617,12 @@
             flex: 1;
         }
         
+        /* ========================================
+           모바일 버튼 레이아웃 수정 지점 (1)
+        ======================================== */
         .card-actions {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            display: flex; /* grid -> flex 변경 */
+            /* grid-template-columns: repeat(4, 1fr); 제거 */
             gap: 0.625rem;
         }
         
@@ -639,7 +642,12 @@
             transition: all 0.3s var(--transition);
             font-weight: 700;
             min-height: 80px;
+            
+            flex: 1; /* 자식 요소가 꽉 차도록 flex: 1 추가 */
         }
+        /* ========================================
+           (수정 완료)
+        ======================================== */
         
         .action-btn:hover {
             background: var(--primary);
@@ -947,18 +955,12 @@
         }
         
         @media (max-width: 768px) {
-            /* ========================================
-               모바일 통계 라벨 수정 지점 
-            ======================================== */
             .hero {
-                /* vh 고정 높이를 제거하고, padding으로 높이를 확보합니다. */
                 min-height: auto; 
-                /* 콘텐츠 + 상하 여백 + 웨이브 높이를 고려한 패딩 */
                 padding: 5rem 0 8rem 0; 
             }
             
             .hero-content {
-                /* hero 영역 자체에 패딩이 있으므로, 내부 패딩은 좌우만 설정 */
                 padding: 0 1.5rem; 
             }
 
@@ -971,7 +973,7 @@
             }
 
             .hero-subtitle {
-                margin-bottom: 2.5rem; /* 통계 섹션과의 간격 확보 */
+                margin-bottom: 2.5rem;
             }
             
             .hero-stats {
@@ -989,11 +991,8 @@
 
             .stat-label {
                 font-size: 0.8125rem; 
-                display: block; /* 라벨이 항상 보이도록 강제 */
+                display: block;
             }
-            /* ========================================
-               (수정 완료)
-            ======================================== */
             
             .search-card {
                 padding: 1.5rem;
@@ -1021,13 +1020,21 @@
                 display: none;
             }
             
+            /* ========================================
+               모바일 버튼 레이아웃 수정 지점 (2)
+            ======================================== */
             .card-actions {
-                grid-template-columns: repeat(2, 1fr);
+                /* grid-template-columns: repeat(2, 1fr); 제거 */
+                /* flex로 변경된 기본 스타일을 따름 */
                 gap: 0.75rem;
             }
+            /* ========================================
+               (수정 완료)
+            ======================================== */
             
             .action-btn {
                 min-height: 70px;
+                /* flex: 1; 은 기본 스타일에서 상속받음 */
             }
 
             .location-notice {
@@ -1057,11 +1064,11 @@
             }
 
             .hero {
-                 padding-top: 4rem; /* 더 좁은 화면 패딩 조정 */
+                 padding-top: 4rem;
             }
             
             .stat-number {
-                font-size: 1.875rem; /* 더 좁은 화면 폰트 조정 */
+                font-size: 1.875rem;
             }
 
             .stat-label {
@@ -1105,7 +1112,7 @@
                 전 세계 어디서나
             </div>
             <h1>🌏 한인 업체 검색</h1>
-            <p class="hero-subtitle">국가, 도시, 업종별로 쉽게 찾아보세요</p>
+            <p class="hero-subtitle">국가, 도시, 업종별로 한인 업체를 쉽게 찾아보세요</p>
             <div class="hero-stats">
                 <div class="stat-item">
                     <span class="stat-number" id="total-businesses">-</span>
@@ -1562,9 +1569,6 @@
                 if (state.searchQuery) {
                     const q = state.searchQuery.toLowerCase();
                     
-                    /* ========================================
-                       검색 오류(TypeError) 수정 지점
-                    ======================================== */
                     if (![b.businessName, b.address, b.feature].some(f => String(f).toLowerCase().includes(q))) {
                         return false;
                     }
