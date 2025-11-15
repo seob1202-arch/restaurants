@@ -450,6 +450,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
             gap: 2rem;
+            perspective: 1500px;
         }
         
         .business-card {
@@ -457,17 +458,19 @@
             border-radius: var(--radius-xl);
             overflow: hidden;
             border: 1px solid var(--border);
-            transition: all 0.4s var(--transition);
+            transition: transform 0.4s var(--transition), 
+                        box-shadow 0.4s var(--transition), 
+                        border-color 0.4s var(--transition);
             animation: fadeInUp 0.5s var(--transition) both;
         }
         
         .business-card:hover {
-            transform: translateY(-12px);
+            transform: perspective(1500px) translateY(-10px) rotateX(3deg) scale(1.02);
             box-shadow: 
-                0 0 0 1px rgba(0, 0, 0, 0.02),
-                0 30px 60px -15px rgba(var(--shadow-color), 0.25),
-                0 15px 30px -10px rgba(var(--shadow-color), 0.15);
-            border-color: var(--primary);
+                0 0 0 1px rgba(99, 102, 241, 0.5),
+                0 30px 60px -15px rgba(var(--shadow-color), 0.2),
+                0 15px 30px -10px rgba(var(--shadow-color), 0.1);
+            border-color: var(--primary-light);
         }
         
         .card-image-container {
@@ -493,8 +496,9 @@
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 0.5rem 1rem;
             border-radius: var(--radius-full);
             display: flex;
@@ -560,30 +564,6 @@
             overflow: hidden;
         }
         
-        .card-details {
-            display: flex;
-            flex-direction: column;
-            gap: 0.875rem;
-            margin-bottom: 1.25rem;
-            padding-bottom: 1.25rem;
-            border-bottom: 2px solid var(--bg-tertiary);
-        }
-        
-        .detail-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            color: var(--text-secondary);
-            font-size: 0.9375rem;
-            line-height: 1.6;
-            min-height: 24px;
-        }
-        
-        .detail-text {
-            flex: 1;
-            word-break: break-word;
-        }
-        
         .card-distance {
             display: inline-flex;
             align-items: center;
@@ -596,12 +576,45 @@
             font-weight: 700;
             margin-bottom: 1rem;
         }
+
+        .icon {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .card-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.875rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 2px solid var(--bg-tertiary);
+        }
         
-        .card-distance .detail-icon {
-            width: 16px !important;
-            height: 16px !important;
-            min-width: 16px;
-            max-width: 16px;
+        .detail-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+        
+        .detail-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            color: var(--primary);
+            margin-top: 3px;
+        }
+        
+        .detail-text {
+            flex: 1;
         }
         
         .card-actions {
@@ -635,39 +648,18 @@
             transform: translateY(-4px);
         }
         
+        .action-icon {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+        
         .action-label {
             font-size: 0.6875rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             font-weight: 700;
             text-align: center;
-            line-height: 1.2;
-        }
-        
-        /* ========== SVG Icons ========== */
-        svg {
-            display: block;
-        }
-        
-        .detail-icon {
-            width: 18px !important;
-            height: 18px !important;
-            min-width: 18px;
-            min-height: 18px;
-            max-width: 18px;
-            max-height: 18px;
-            flex-shrink: 0;
-            color: var(--primary);
-        }
-        
-        .action-icon {
-            width: 22px !important;
-            height: 22px !important;
-            min-width: 22px;
-            min-height: 22px;
-            max-width: 22px;
-            max-height: 22px;
-            flex-shrink: 0;
         }
         
         /* ========== Loading ========== */
@@ -820,21 +812,12 @@
             text-decoration: none;
             color: var(--text-primary);
             transition: all 0.2s var(--transition);
-            flex-shrink: 0;
         }
         
         .table-action-btn:hover {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
-        }
-        
-        .table-action-btn .action-icon,
-        .table-action-btn .detail-icon {
-            width: 20px !important;
-            height: 20px !important;
-            min-width: 20px;
-            max-width: 20px;
         }
         
         /* ========== Pagination ========== */
@@ -914,8 +897,13 @@
             border: 2px solid #BFDBFE;
             border-radius: var(--radius-lg);
             margin-bottom: 2rem;
-            font-weight: 600;
             color: #1E40AF;
+        }
+
+        .location-notice-text {
+            flex: 1;
+            font-weight: 600;
+            padding-right: 1rem;
         }
         
         .location-notice.success {
@@ -931,6 +919,10 @@
         }
         
         .location-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
             margin-left: auto;
             padding: 0.75rem 1.5rem;
             background: var(--primary);
@@ -1001,6 +993,26 @@
             .action-btn {
                 min-height: 70px;
             }
+
+            .location-notice {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.25rem;
+                padding: 1.5rem;
+            }
+
+            .location-notice-text {
+                padding-right: 0;
+                line-height: 1.5;
+            }
+
+            .location-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 1rem;
+                font-size: 1rem;
+                margin-left: 0;
+            }
         }
         
         @media (max-width: 480px) {
@@ -1008,8 +1020,22 @@
                 font-size: 2rem;
             }
             
+            .hero-stats {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.5rem;
+                width: 100%;
+                padding: 0 1rem;
+            }
+            
             .stat-number {
-                font-size: 2rem;
+                font-size: 1.875rem;
+                margin-bottom: 0.25rem;
+            }
+
+            .stat-label {
+                font-size: 0.75rem;
+                display: block;
             }
             
             .search-input {
@@ -1148,13 +1174,18 @@
         
         // SVG Icons
         const ICONS = {
-            phone: '<svg class="action-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
-            map: '<svg class="action-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
-            email: '<svg class="action-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
-            web: '<svg class="action-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
-            location: '<svg class="detail-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
-            clock: '<svg class="detail-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-            phoneDetail: '<svg class="detail-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'
+            phone: '<svg class="icon action-icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+            map: '<svg class="icon action-icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+            email: '<svg class="icon action-icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+            web: '<svg class="icon action-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+            location: '<svg class="icon detail-icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+            clock: '<svg class="icon detail-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+            phoneDetail: '<svg class="icon detail-icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+            
+            /* ========================================
+               JS 수정 지점 (거리 뱃지 전용 아이콘 추가)
+            ======================================== */
+            distance: '<svg class="icon" style="width:16px; height:16px; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'
         };
         
         function escapeHtml(text) {
@@ -1181,8 +1212,8 @@
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
             const a = Math.sin(dLat / 2) ** 2 +
-                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                      Math.sin(dLon / 2) ** 2;
+                        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                        Math.sin(dLon / 2) ** 2;
             return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         }
         
@@ -1290,7 +1321,27 @@
                 }
             }, 20);
         }
-        
+
+        function showLocationNotice(msg, type) {
+            let textSpan = $.locationNotice.querySelector('.location-notice-text');
+            
+            if (!textSpan) {
+                textSpan = document.createElement('span');
+                textSpan.className = 'location-notice-text';
+                const btn = $.locationNotice.querySelector('.location-btn');
+                if (btn) {
+                    $.locationNotice.insertBefore(textSpan, btn);
+                } else {
+                    $.locationNotice.appendChild(textSpan);
+                }
+            }
+            
+            textSpan.textContent = msg;
+            
+            $.locationNotice.className = `location-notice ${type}`;
+            $.locationNotice.classList.remove('hidden');
+        }
+
         function getUserLocation() {
             if (!navigator.geolocation) {
                 showLocationNotice('위치 서비스를 지원하지 않습니다.', 'error');
@@ -1305,7 +1356,13 @@
         function createLocationButton() {
             const btn = document.createElement('button');
             btn.className = 'location-btn';
-            btn.textContent = '📍 내 위치 사용';
+            btn.innerHTML = `
+                <svg class="icon" viewBox="0 0 24 24" style="width:18px; height:18px; stroke-width: 2.5; flex-shrink: 0;">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span>내 위치 사용</span>
+            `;
             btn.addEventListener('click', requestLocation);
             $.locationNotice.appendChild(btn);
         }
@@ -1329,6 +1386,10 @@
                     showLocationNotice('✅ 위치 정보를 가져왔습니다!', 'success');
                     enableDistanceSort();
                     if (state.sortBy === 'distance') handleFilterChange();
+
+                    const btn = $.locationNotice.querySelector('.location-btn');
+                    if (btn) btn.classList.add('hidden');
+
                     setTimeout(() => $.locationNotice.classList.add('hidden'), 3000);
                 },
                 () => {
@@ -1340,12 +1401,6 @@
                     }
                 }
             );
-        }
-        
-        function showLocationNotice(msg, type) {
-            $.locationNotice.textContent = msg;
-            $.locationNotice.className = `location-notice ${type}`;
-            $.locationNotice.classList.remove('hidden');
         }
         
         function disableDistanceSort() {
@@ -1572,8 +1627,11 @@
                     ? `src="${escapeHtml(b.image)}"` 
                     : `data-src="${escapeHtml(b.image)}" loading="lazy"`;
                 
+                /* ========================================
+                   JS 수정 지점 (새로운 distance 아이콘 사용)
+                ======================================== */
                 const distance = b.distance && state.userLocation
-                    ? `<div class="card-distance"><svg class="detail-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${formatDistance(b.distance)}</div>`
+                    ? `<div class="card-distance">${ICONS.distance} ${formatDistance(b.distance)}</div>`
                     : '';
                 
                 const tags = b.services.map(s => 
@@ -1661,8 +1719,8 @@
                     ? `src="${escapeHtml(b.image)}"` 
                     : `data-src="${escapeHtml(b.image)}" loading="lazy"`;
                 const tags = b.services.map(s => `<span class="tag">${escapeHtml(s)}</span>`).join('');
-                const email = b.email ? `<a href="mailto:${escapeHtml(b.email)}" class="table-action-btn"><svg class="action-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>` : '';
-                const website = b.website ? `<a href="https://${escapeHtml(b.website)}" target="_blank" rel="noopener" class="table-action-btn"><svg class="action-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></a>` : '';
+                const email = b.email ? `<a href="mailto:${escapeHtml(b.email)}" class="table-action-btn" title="이메일">${ICONS.email}</a>` : '';
+                const website = b.website ? `<a href="https://${escapeHtml(b.website)}" target="_blank" rel="noopener" class="table-action-btn" title="웹사이트">${ICONS.web}</a>` : '';
                 
                 row.innerHTML = `
                     <td><img ${imgAttr} alt="${escapeHtml(b.businessName)}" class="table-image"></td>
@@ -1679,8 +1737,8 @@
                     <td>${escapeHtml(b.phone)}</td>
                     <td>
                         <div class="table-actions">
-                            <a href="tel:${escapeHtml(b.phone)}" class="table-action-btn"><svg class="action-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
-                            <a href="${escapeHtml(b.googleMapsUrl)}" target="_blank" rel="noopener" class="table-action-btn"><svg class="action-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></a>
+                            <a href="tel:${escapeHtml(b.phone)}" class="table-action-btn" title="전화">${ICONS.phone}</a>
+                            <a href="${escapeHtml(b.googleMapsUrl)}" target="_blank" rel="noopener" class="table-action-btn" title="지도">${ICONS.map}</a>
                             ${email}
                             ${website}
                         </div>
@@ -1802,7 +1860,7 @@
                         mutation.addedNodes.forEach(node => {
                             if (node.nodeType === 1) {
                                 const images = node.querySelectorAll?.('img[data-src]') || 
-                                              (node.tagName === 'IMG' && node.hasAttribute('data-src') ? [node] : []);
+                                                (node.tagName === 'IMG' && node.hasAttribute('data-src') ? [node] : []);
                                 images.forEach(img => observer.observe(img));
                             }
                         });
