@@ -450,8 +450,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
             gap: 2rem;
-            /* 3D 호버 효과를 위한 perspective 추가 */
-            perspective: 1500px;
         }
         
         .business-card {
@@ -459,21 +457,17 @@
             border-radius: var(--radius-xl);
             overflow: hidden;
             border: 1px solid var(--border);
-            /* 트랜지션 속성 분리 및 미세 조정 */
-            transition: transform 0.4s var(--transition), 
-                        box-shadow 0.4s var(--transition), 
-                        border-color 0.4s var(--transition);
+            transition: all 0.4s var(--transition);
             animation: fadeInUp 0.5s var(--transition) both;
         }
         
         .business-card:hover {
-            /* 3D Hover 효과 및 그림자/테두리 개선 */
-            transform: perspective(1500px) translateY(-10px) rotateX(3deg) scale(1.02);
+            transform: translateY(-12px);
             box-shadow: 
-                0 0 0 1px rgba(99, 102, 241, 0.5), /* --primary-light 톤의 테두리 강조 */
-                0 30px 60px -15px rgba(var(--shadow-color), 0.2),
-                0 15px 30px -10px rgba(var(--shadow-color), 0.1);
-            border-color: var(--primary-light);
+                0 0 0 1px rgba(0, 0, 0, 0.02),
+                0 30px 60px -15px rgba(var(--shadow-color), 0.25),
+                0 15px 30px -10px rgba(var(--shadow-color), 0.15);
+            border-color: var(--primary);
         }
         
         .card-image-container {
@@ -499,10 +493,8 @@
             position: absolute;
             top: 1rem;
             right: 1rem;
-            /* 글래스모피즘 효과 개선 */
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3); /* 테두리 추가 */
             padding: 0.5rem 1rem;
             border-radius: var(--radius-full);
             display: flex;
@@ -568,6 +560,30 @@
             overflow: hidden;
         }
         
+        .card-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.875rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 2px solid var(--bg-tertiary);
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            min-height: 24px;
+        }
+        
+        .detail-text {
+            flex: 1;
+            word-break: break-word;
+        }
+        
         .card-distance {
             display: inline-flex;
             align-items: center;
@@ -580,53 +596,12 @@
             font-weight: 700;
             margin-bottom: 1rem;
         }
-
-        /* ========================================
-        오류 수정 지점
-        ========================================
-        아래 `.icon` 기본 스타일 블록을 .detail-icon 보다 
-        앞서는 위치(여기)로 이동시켰습니다.
-        */
-        /* ========== SVG Icons ========== */
-        .icon {
-            width: 100%;
-            height: 100%;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .card-details {
-            display: flex;
-            flex-direction: column;
-            gap: 0.875rem;
-            margin-bottom: 1.25rem;
-            padding-bottom: 1.25rem;
-            border-bottom: 2px solid var(--bg-tertiary);
-        }
         
-        .detail-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            color: var(--text-secondary);
-            font-size: 0.9375rem;
-            line-height: 1.6;
-        }
-        
-        .detail-icon {
-            /* 이 스타일이 .icon의 100% 너비를 덮어써야 합니다. */
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-            color: var(--primary);
-            margin-top: 3px;
-        }
-        
-        .detail-text {
-            flex: 1;
+        .card-distance .detail-icon {
+            width: 16px !important;
+            height: 16px !important;
+            min-width: 16px;
+            max-width: 16px;
         }
         
         .card-actions {
@@ -660,27 +635,40 @@
             transform: translateY(-4px);
         }
         
-        .action-icon {
-            /* 이 스타일이 .icon의 100% 너비를 덮어써야 합니다. */
-            width: 22px;
-            height: 22px;
-            flex-shrink: 0;
-        }
-        
         .action-label {
             font-size: 0.6875rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             font-weight: 700;
             text-align: center;
+            line-height: 1.2;
         }
-
-        /* ========================================
-        오류 수정 지점
-        ========================================
-        기존에 여기에 있던 .icon 스타일 블록을
-        위(line 687)로 옮겼습니다.
-        */
+        
+        /* ========== SVG Icons ========== */
+        svg {
+            display: block;
+        }
+        
+        .detail-icon {
+            width: 18px !important;
+            height: 18px !important;
+            min-width: 18px;
+            min-height: 18px;
+            max-width: 18px;
+            max-height: 18px;
+            flex-shrink: 0;
+            color: var(--primary);
+        }
+        
+        .action-icon {
+            width: 22px !important;
+            height: 22px !important;
+            min-width: 22px;
+            min-height: 22px;
+            max-width: 22px;
+            max-height: 22px;
+            flex-shrink: 0;
+        }
         
         /* ========== Loading ========== */
         .loading {
@@ -832,12 +820,21 @@
             text-decoration: none;
             color: var(--text-primary);
             transition: all 0.2s var(--transition);
+            flex-shrink: 0;
         }
         
         .table-action-btn:hover {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
+        }
+        
+        .table-action-btn .action-icon,
+        .table-action-btn .detail-icon {
+            width: 20px !important;
+            height: 20px !important;
+            min-width: 20px;
+            max-width: 20px;
         }
         
         /* ========== Pagination ========== */
@@ -1151,13 +1148,13 @@
         
         // SVG Icons
         const ICONS = {
-            phone: '<svg class="icon action-icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
-            map: '<svg class="icon action-icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
-            email: '<svg class="icon action-icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
-            web: '<svg class="icon action-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
-            location: '<svg class="icon detail-icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
-            clock: '<svg class="icon detail-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-            phoneDetail: '<svg class="icon detail-icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'
+            phone: '<svg class="action-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+            map: '<svg class="action-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+            email: '<svg class="action-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+            web: '<svg class="action-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+            location: '<svg class="detail-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+            clock: '<svg class="detail-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+            phoneDetail: '<svg class="detail-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'
         };
         
         function escapeHtml(text) {
@@ -1184,8 +1181,8 @@
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
             const a = Math.sin(dLat / 2) ** 2 +
-                        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                        Math.sin(dLon / 2) ** 2;
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon / 2) ** 2;
             return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         }
         
@@ -1576,7 +1573,7 @@
                     : `data-src="${escapeHtml(b.image)}" loading="lazy"`;
                 
                 const distance = b.distance && state.userLocation
-                    ? `<div class="card-distance">${ICONS.location.replace('detail-icon', '')} ${formatDistance(b.distance)}</div>` // detail-icon 클래스 제거
+                    ? `<div class="card-distance"><svg class="detail-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${formatDistance(b.distance)}</div>`
                     : '';
                 
                 const tags = b.services.map(s => 
@@ -1613,10 +1610,6 @@
                             <div class="detail-item">
                                 ${ICONS.clock}
                                 <span class="detail-text">${escapeHtml(b.hours)}</span>
-                            </div>
-                            <div class="detail-item">
-                                ${ICONS.phoneDetail}
-                                <span class="detail-text">${escapeHtml(b.phone)}</span>
                             </div>
                         </div>
                         <div class="card-actions">
@@ -1668,8 +1661,8 @@
                     ? `src="${escapeHtml(b.image)}"` 
                     : `data-src="${escapeHtml(b.image)}" loading="lazy"`;
                 const tags = b.services.map(s => `<span class="tag">${escapeHtml(s)}</span>`).join('');
-                const email = b.email ? `<a href="mailto:${escapeHtml(b.email)}" class="table-action-btn" title="이메일">${ICONS.email}</a>` : '';
-                const website = b.website ? `<a href="https://${escapeHtml(b.website)}" target="_blank" rel="noopener" class="table-action-btn" title="웹사이트">${ICONS.web}</a>` : '';
+                const email = b.email ? `<a href="mailto:${escapeHtml(b.email)}" class="table-action-btn"><svg class="action-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>` : '';
+                const website = b.website ? `<a href="https://${escapeHtml(b.website)}" target="_blank" rel="noopener" class="table-action-btn"><svg class="action-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></a>` : '';
                 
                 row.innerHTML = `
                     <td><img ${imgAttr} alt="${escapeHtml(b.businessName)}" class="table-image"></td>
@@ -1686,8 +1679,8 @@
                     <td>${escapeHtml(b.phone)}</td>
                     <td>
                         <div class="table-actions">
-                            <a href="tel:${escapeHtml(b.phone)}" class="table-action-btn" title="전화">${ICONS.phone}</a>
-                            <a href="${escapeHtml(b.googleMapsUrl)}" target="_blank" rel="noopener" class="table-action-btn" title="지도">${ICONS.map}</a>
+                            <a href="tel:${escapeHtml(b.phone)}" class="table-action-btn"><svg class="action-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
+                            <a href="${escapeHtml(b.googleMapsUrl)}" target="_blank" rel="noopener" class="table-action-btn"><svg class="action-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></a>
                             ${email}
                             ${website}
                         </div>
@@ -1809,7 +1802,7 @@
                         mutation.addedNodes.forEach(node => {
                             if (node.nodeType === 1) {
                                 const images = node.querySelectorAll?.('img[data-src]') || 
-                                                (node.tagName === 'IMG' && node.hasAttribute('data-src') ? [node] : []);
+                                              (node.tagName === 'IMG' && node.hasAttribute('data-src') ? [node] : []);
                                 images.forEach(img => observer.observe(img));
                             }
                         });
